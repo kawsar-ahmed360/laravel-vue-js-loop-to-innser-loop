@@ -1,0 +1,35 @@
+//laravel vue js v-for loop then inner loop another query v-for loop id code here
+<template>
+  <div>
+    <ul v-for="parent in parents">
+      <li>{{ parent.name }}</li>
+      <ul v-for="child in children(parent.id)">
+        <li>{{ child.name }}</li>
+      </ul>
+    </ul>
+  </div>
+</template>
+
+
+<script>
+export default {
+  data() {
+    return {
+      parents: []
+    };
+  },
+  created() {
+    this.fetchParents();
+  },
+  methods: {
+    fetchParents() {
+      axios.get("/api/parents").then(response => {
+        this.parents = response.data;
+      });
+    },
+    children(parentId) {
+      return this.parents.find(parent => parent.id === parentId).children;
+    }
+  }
+};
+</script>
